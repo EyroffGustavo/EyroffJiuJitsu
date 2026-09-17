@@ -4,8 +4,8 @@
 .testimonialTrack{display:flex;width:max-content;animation:testimonials-right 32s linear infinite;will-change:transform}
 .testimonialCarousel:hover .testimonialTrack,.testimonialCarousel:focus-within .testimonialTrack{animation-play-state:paused}
 .testimonialGroup{display:flex;gap:18px;padding-right:18px}
-.testimonialCard{width:clamp(280px,38vw,430px);min-height:285px;padding:38px;background:#15191f;border-top:3px solid #e52b3b;display:flex;flex-direction:column;justify-content:center;box-shadow:0 18px 48px #00000035}
-.testimonialCard blockquote{margin:0 0 30px;font:700 clamp(24px,3vw,36px)/1.18 'Barlow Condensed';text-transform:uppercase}
+.testimonialCard{width:clamp(280px,38vw,430px);height:285px;padding:38px;background:#15191f;border-top:3px solid #e52b3b;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;box-shadow:0 18px 48px #00000035}
+.testimonialCard blockquote{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;line-clamp:6;overflow:hidden;overflow-wrap:anywhere;margin:0 auto 30px 0;font:700 clamp(20px,2.4vw,32px)/1.18 'Barlow Condensed';text-transform:uppercase}
 .testimonialCard b{font-size:16px}.testimonialCard small{margin-top:6px;color:#e52b3b}
 .testimonialEmpty{max-width:620px;margin-top:38px;color:#92959b;line-height:1.65}
 @keyframes testimonials-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
@@ -24,4 +24,4 @@
 .publishToggle{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:700}.publishToggle input{width:18px;height:18px;accent-color:#e52b3b}
 .adminEmpty{margin-top:25px;padding:30px;background:#111419;color:#999;border:1px solid #ffffff18}
 @media(max-width:900px){.testimonials{grid-template-columns:1fr;gap:36px}.feedbackAdminGrid{grid-template-columns:1fr}}
-@media(max-width:600px){.testimonials{padding:75px 6%}.testimonialCard{width:78vw;min-height:245px;padding:28px}.feedbackForm{padding:24px}.feedbackAdminTitle{align-items:flex-start;flex-direction:column}}
+@media(max-width:600px){.testimonials{padding:75px 6%}.testimonialCard{width:78vw;height:245px;padding:28px}.testimonialCard blockquote{-webkit-line-clamp:5;line-clamp:5}.feedbackForm{padding:24px}.feedbackAdminTitle{align-items:flex-start;flex-direction:column}}

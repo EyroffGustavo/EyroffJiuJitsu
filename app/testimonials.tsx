@@ -29,7 +29,7 @@ export default function Testimonials() {
   }
 
   const group = (copy: string, hidden = false) => <div className="testimonialGroup" aria-hidden={hidden || undefined}>
-    {items.map(item => <article className="testimonialCard" key={`${copy}-${item.id}`}><blockquote>“{item.message}”</blockquote><b>{item.name}</b><small>{item.interest}</small></article>)}
+    {items.map(item => <article className="testimonialCard" key={`${copy}-${item.id}`}><blockquote title={item.message}>“{item.message}”</blockquote><b>{item.name}</b><small>{item.interest}</small></article>)}
   </div>;
 
   return <section className="testimonials" id="depoimentos">
@@ -40,7 +40,7 @@ export default function Testimonials() {
       <h3>DEIXE SUA EXPERIÊNCIA CONOSCO</h3><p>Conte como está sendo sua experiência na Escola Eyroff.</p>
       <label>Nome<input name="name" required minLength={2} maxLength={80}/></label>
       <label>Turma<select name="interest" required><option value="">Selecione</option><option>Jiu Jitsu Adulto</option><option>Jiu Jitsu Kids</option></select></label>
-      <label>Depoimento<textarea name="message" required minLength={10} maxLength={500} rows={5} placeholder="Escreva sua experiência..."/></label>
+      <label>Depoimento<textarea name="message" required minLength={10} maxLength={280} rows={5} placeholder="Escreva sua experiência..."/></label>
       <button className="button">ENVIAR DEPOIMENTO →</button><p className="feedbackStatus">{status}</p>
     </form>
   </section>;

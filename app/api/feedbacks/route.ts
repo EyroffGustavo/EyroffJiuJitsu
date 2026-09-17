@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const name = String(body.name ?? "").trim();
     const interest = String(body.interest ?? "").trim();
     const message = String(body.message ?? "").trim();
-    if (name.length < 2 || name.length > 80 || !["Jiu Jitsu Adulto", "Jiu Jitsu Kids"].includes(interest) || message.length < 10 || message.length > 500) return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+    if (name.length < 2 || name.length > 80 || !["Jiu Jitsu Adulto", "Jiu Jitsu Kids"].includes(interest) || message.length < 10 || message.length > 280) return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
     await getDb().insert(feedbacks).values({ name, interest, message });
     return NextResponse.json({ ok: true });
   } catch {
