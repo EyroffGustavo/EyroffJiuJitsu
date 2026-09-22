@@ -6,6 +6,7 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 import "./globals.css";
+import "./footer.css";
 import "./admin.css";
 import "./filters.css";
 import "./brand-logo.css";
