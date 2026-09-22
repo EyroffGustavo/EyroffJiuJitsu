@@ -3,11 +3,16 @@ import { NextResponse } from "next/server";
 import { getDb } from "../../../db";
 import { feedbacks } from "../../../db/schema";
 
-export const dynamic = "force-dynamic";
+const allowedInterests = ["Jiu Jitsu Adulto", "Jiu Jitsu Kids"];
 
 export async function GET() {
-  const rows = await getDb().select({ id: feedbacks.id, name: feedbacks.name, interest: feedbacks.interest, message: feedbacks.message }).from(feedbacks).where(eq(feedbacks.published, true)).orderBy(desc(feedbacks.id));
-  return NextResponse.json(rows);
+  try {
+    const rows = await getDb().select({ id: feedbacks.id, name: feedbacks.name, interest: feedbacks.interest, message: feedbacks.message }).from(feedbacks).where(eq(feedbacks.approved, true)).orderBy(desc(feedbacks.id));
+    return NextResponse.json(rows);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Não foi possível carregar os depoimentos" }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
@@ -16,10 +21,11 @@ export async function POST(request: Request) {
     const name = String(body.name ?? "").trim();
     const interest = String(body.interest ?? "").trim();
     const message = String(body.message ?? "").trim();
-    if (name.length < 2 || name.length > 80 || !["Jiu Jitsu Adulto", "Jiu Jitsu Kids"].includes(interest) || message.length < 10 || message.length > 280) return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+    if (name.length < 2 || name.length > 80 || !allowedInterests.includes(interest) || message.length < 10 || message.length > 500) return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
     await getDb().insert(feedbacks).values({ name, interest, message });
     return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json({ error: "Erro ao salvar" }, { status: 500 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Não foi possível enviar o depoimento" }, { status: 500 });
   }
 }
