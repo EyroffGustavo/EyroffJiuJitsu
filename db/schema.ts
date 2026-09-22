@@ -1,20 +1,15 @@
-import { boolean, integer, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {boolean,index,integer,pgTable,serial,text,timestamp,uniqueIndex} from "drizzle-orm/pg-core";
 
-export const leads = pgTable("leads", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 100 }).notNull(),
-  age: integer("age").notNull(),
-  interest: varchar("interest", { length: 40 }).notNull(),
-  phone: varchar("phone", { length: 20 }).notNull(),
-  instagram: varchar("instagram", { length: 100 }).notNull().default(""),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+const created=()=>timestamp("created_at",{mode:"string"}).notNull().defaultNow();
 
-export const feedbacks = pgTable("feedbacks", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 80 }).notNull(),
-  interest: varchar("interest", { length: 40 }).notNull(),
-  message: text("message").notNull(),
-  published: boolean("published").notNull().default(false),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+export const leads=pgTable("leads",{id:serial("id").primaryKey(),name:text("name").notNull(),age:integer("age").notNull(),interest:text("interest").notNull(),phone:text("phone").notNull(),instagram:text("instagram").notNull().default(""),createdAt:created()});
+export const feedbacks=pgTable("feedbacks",{id:serial("id").primaryKey(),name:text("name").notNull(),interest:text("interest").notNull(),message:text("message").notNull(),approved:boolean("published").notNull().default(false),createdAt:created()},table=>[index("idx_feedbacks_approved").on(table.approved)]);
+export const classSchedules=pgTable("class_schedules",{id:serial("id").primaryKey(),category:text("category").notNull(),label:text("label").notNull(),active:boolean("active").notNull().default(true),position:integer("position").notNull().default(0),createdAt:created()});
+export const scheduleResponses=pgTable("schedule_responses",{id:serial("id").primaryKey(),name:text("name").notNull(),phone:text("phone").notNull(),category:text("category").notNull(),scheduleId:integer("schedule_id"),scheduleLabel:text("schedule_label").notNull(),suggestedTime:text("suggested_time").notNull().default(""),createdAt:created()});
+export const professors=pgTable("professors",{id:serial("id").primaryKey(),name:text("name").notNull(),username:text("username").notNull(),passwordHash:text("password_hash").notNull(),passwordSalt:text("password_salt").notNull(),active:boolean("active").notNull().default(true),createdAt:created()},table=>[uniqueIndex("idx_professors_username").on(table.username)]);
+export const academyClasses=pgTable("academy_classes",{id:serial("id").primaryKey(),name:text("name").notNull(),category:text("category").notNull(),scheduleLabel:text("schedule_label").notNull(),active:boolean("active").notNull().default(true),createdAt:created()});
+export const classProfessors=pgTable("class_professors",{id:serial("id").primaryKey(),classId:integer("class_id").notNull(),professorId:integer("professor_id").notNull()},table=>[uniqueIndex("idx_class_professor_unique").on(table.classId,table.professorId)]);
+export const students=pgTable("students",{id:serial("id").primaryKey(),name:text("name").notNull(),belt:text("belt").notNull(),active:boolean("active").notNull().default(true),createdAt:created()});
+export const classStudents=pgTable("class_students",{id:serial("id").primaryKey(),classId:integer("class_id").notNull(),studentId:integer("student_id").notNull()},table=>[uniqueIndex("idx_class_student_unique").on(table.classId,table.studentId)]);
+export const attendanceSessions=pgTable("attendance_sessions",{id:serial("id").primaryKey(),classId:integer("class_id").notNull(),classDate:text("class_date").notNull(),professorId:integer("professor_id").notNull(),createdAt:created()},table=>[uniqueIndex("idx_attendance_class_date").on(table.classId,table.classDate)]);
+export const attendanceRecords=pgTable("attendance_records",{id:serial("id").primaryKey(),sessionId:integer("session_id").notNull(),studentId:integer("student_id").notNull(),status:text("status").notNull()},table=>[uniqueIndex("idx_attendance_record_unique").on(table.sessionId,table.studentId)]);

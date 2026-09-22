@@ -17,10 +17,7 @@ async function hmac(value: string) {
 }
 
 async function sameValue(left: string, right: string) {
-  const [a, b] = await Promise.all([
-    crypto.subtle.digest("SHA-256", new TextEncoder().encode(left)),
-    crypto.subtle.digest("SHA-256", new TextEncoder().encode(right)),
-  ]);
+  const [a, b] = await Promise.all([crypto.subtle.digest("SHA-256", new TextEncoder().encode(left)), crypto.subtle.digest("SHA-256", new TextEncoder().encode(right))]);
   const x = new Uint8Array(a), y = new Uint8Array(b);
   let different = x.length ^ y.length;
   for (let i = 0; i < Math.min(x.length, y.length); i++) different |= x[i] ^ y[i];
@@ -28,13 +25,9 @@ async function sameValue(left: string, right: string) {
 }
 
 export async function credentialsAreValid(username: string, password: string) {
-  const expectedUser = runtimeValue("ADMIN_USER");
-  const expectedPassword = runtimeValue("ADMIN_PASSWORD");
+  const expectedUser = runtimeValue("ADMIN_USER"), expectedPassword = runtimeValue("ADMIN_PASSWORD");
   if (!expectedUser || !expectedPassword) return false;
-  const [validUser, validPassword] = await Promise.all([
-    sameValue(username, expectedUser),
-    sameValue(password, expectedPassword),
-  ]);
+  const [validUser, validPassword] = await Promise.all([sameValue(username, expectedUser), sameValue(password, expectedPassword)]);
   return validUser && validPassword;
 }
 

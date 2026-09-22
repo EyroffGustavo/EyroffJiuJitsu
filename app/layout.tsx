@@ -11,6 +11,8 @@ import "./filters.css";
 import "./brand-logo.css";
 import "./testimonials.css";
 import "./privacy.css";
+import "./survey.css";
+import "./teacher.css";
 
 export const metadata: Metadata = {
   title: "Eyroff Escola de Jiu Jitsu",

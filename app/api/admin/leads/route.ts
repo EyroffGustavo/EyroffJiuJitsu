@@ -1,0 +1,2 @@
+import {eq} from "drizzle-orm";import {NextResponse} from "next/server";import {getDb} from "../../../../db";import {leads} from "../../../../db/schema";import {isAdminAuthenticated} from "../../../admin/auth";
+export async function DELETE(req:Request){if(!await isAdminAuthenticated())return NextResponse.json({error:"Não autorizado"},{status:401});const id=Number(new URL(req.url).searchParams.get("id"));if(!Number.isInteger(id))return NextResponse.json({error:"ID inválido"},{status:400});await getDb().delete(leads).where(eq(leads.id,id));return NextResponse.json({ok:true})}
