@@ -10,7 +10,15 @@ export default function ScheduleInterest(){
   const[selectedIds,setSelectedIds]=useState<number[]>([]);
   const[status,setStatus]=useState("");
 
-  useEffect(()=>{fetch("/api/schedules").then(r=>r.ok?r.json():[]).then(setSchedules).catch(()=>setSchedules([]))},[]);
+  useEffect(()=>{
+    fetch(`/api/schedules?t=${Date.now()}`,{cache:"no-store"})
+      .then(async response=>{
+        if(!response.ok)throw new Error("Não foi possível carregar os horários");
+        return response.json();
+      })
+      .then(rows=>setSchedules(Array.isArray(rows)?rows:[]))
+      .catch(()=>{setSchedules([]);setStatus("Não foi possível carregar os horários. Atualize a página e tente novamente.")});
+  },[]);
 
   const categories=useMemo(()=>Array.from(new Set(schedules.map(item=>item.category))).sort((a,b)=>a.localeCompare(b,"pt-BR")),[schedules]);
   const available=useMemo(()=>schedules.filter(item=>item.category===category),[schedules,category]);
