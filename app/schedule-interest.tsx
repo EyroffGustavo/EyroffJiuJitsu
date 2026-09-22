@@ -39,8 +39,14 @@ export default function ScheduleInterest(){
     const suggestedTime=String(data.get("suggestedTime")??"").trim();
     if(!selectedIds.length&&!suggestedTime){setStatus("Escolha pelo menos um horário ou sugira outro.");return}
     setStatus("Registrando...");
-    const response=await fetch("/api/schedule-responses",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:data.get("name"),phone:data.get("phone"),category,scheduleIds:selectedIds,suggestedTime})});
-    if(response.ok){form.reset();setCategory("");setSelectedIds([]);setStatus("Interesse registrado! Obrigado por participar.")}else{const result=await response.json().catch(()=>({}));setStatus(result.error??"Não foi possível registrar. Tente novamente.")}
+    try{
+      const response=await fetch("/api/schedule-responses",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:data.get("name"),phone:data.get("phone"),category,scheduleIds:selectedIds,suggestedTime})});
+      const result=await response.json().catch(()=>({}));
+      if(response.ok){form.reset();setCategory("");setSelectedIds([]);setStatus("Interesse registrado! Obrigado por participar.")}
+      else setStatus(result.error??"Não foi possível registrar. Tente novamente.");
+    }catch{
+      setStatus("Não foi possível conectar ao servidor. Tente novamente.");
+    }
   }
 
   return <section className="scheduleSurvey" id="horarios">
